@@ -89,6 +89,8 @@ pp=function(data,offset,size){
 		p(data[i].id()+"|"+data[i].text()+"|"+data[i].desc()+"|"+data[i].className());
 	}
 }
+// p(currentPackage());
+
 if(currentPackage()!==Package){
 	//需要启动tb
 	app.launch(Package)
@@ -126,22 +128,22 @@ var autoclick=function(arr){
 
 // p(currentActivity());
 
-// p(text("赚喵币").findOnce())
-// exit()
-
-autoclick([function(){
-	return text("赚喵币").findOnce()
-},function(){
-	return desc("养猫分20亿").findOnce()
-},function(){
-	return desc("我的淘宝").findOnce()
-}])
+if(cur!="com.taobao.browser.BrowserActivity"){
+	autoclick([function(){
+		return text("赚喵币").findOnce()
+	},function(){
+		return desc("养猫分20亿").findOnce()
+	},function(){
+		return desc("我的淘宝").findOnce()
+	}])
+}
 // p(text("浏览双11预售主会场(0/1)").findOnce().parent().parent().parent().children())
 
 var TaskTitle=""
 while(1){
 	if(!text("累计任务奖励").findOnce()){
-		if(text("赚喵币").findOnce())text("赚喵币").findOnce().click()
+		if(text("赚喵币").findOnce())
+			text("赚喵币").findOnce().click()
 	}
 	chfn(function(){
 		return (TaskTitle==""||!text(TaskTitle).findOnce())&&text("累计任务奖励").findOnce()
@@ -193,7 +195,7 @@ while(1){
 	if(isFinish)break;//任务完成
 }
 toast("任务完成！")
-device.vibrate(2000)
+device.vibrate(500)
 exit()
 // pp(packageName(Package).find(),0,500);
 
