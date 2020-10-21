@@ -160,7 +160,7 @@ while(1){
 		if(buttonText.startsWith("去")){
 			TaskTitle=child[0].children()[0].text()
 			// console.log(TaskTitle)
-			if(TaskTitle.startsWith("浏览")||TaskTitle.startsWith("逛")||TaskTitle.startsWith("搜")){
+			if(TaskTitle.startsWith("浏览")||TaskTitle.startsWith("逛")||TaskTitle.startsWith("搜")||TaskTitle.startsWith("双")){
 				//找到要运行的任务了
 				isFinish=false;
 				toast(TaskTitle)
@@ -186,7 +186,7 @@ while(1){
 						textContains("任务已完成").findOnce()||
 						descContains("任务已完成").findOnce()
 						);
-				},20000);
+				},22000);
 				back()
 				break;
 			}

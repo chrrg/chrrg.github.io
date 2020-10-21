@@ -4,7 +4,7 @@ device.keepScreenDim(3600 * 1000)
 
 ui.layout(
     <vertical>
-        <text id={"info"} textSize="16sp" />
+        <text id={"text"} textSize="16sp" />
         <list id={"list"}>
             <horizontal w="*">
                 <frame w="5"/>
@@ -12,12 +12,12 @@ ui.layout(
                     <button id="open" text="启动" style="Widget.AppCompat.Button.Colored" textSize="20sp"/>
                 </horizontal>
                 <vertical w="*">
-                    <horizontal w="*">
-                        <text id="info" text="{{name}}" textSize="20sp" ellipsize="end" maxLines="1" textColor="#201fd5"/>
-                        <text text="{{tip}}" textStyle="bold|italic" textSize="12sp" textColor="red"/>
+                    <horizontal id="info1">
+                        <text text="{{name}}" textSize="20sp" maxLines="1" textColor="#201fd5"/>
+                        <text text="{{tip}}" textStyle="bold|italic" textSize="12sp" textColor="red" ellipsize="end"/>
                     </horizontal>
-                    <horizontal w="*" id="info2">
-                        <text w="auto" text="{{'版本：'+version+' '}}" textSize="10sp" textColor="blue"/>
+                    <horizontal id="info2">
+                        <text w="auto" text="{{'版本：'+localVersion+' '}}" textSize="10sp" textColor="blue"/>
                         <text w="auto" text="{{desc}}" textSize="10sp" ellipsize="end" maxLines="1"/>
                     </horizontal>
                 </vertical>
@@ -30,6 +30,9 @@ var storage = storages.create("caohongchrrg@qq.com:chhub");
 var list=storage.get("list");//获取缓存
 var exectuion = null
 var runCode=function(name,code){
+    if(exectuion){
+        exectuion.getEngine().forceStop()
+    }
     try{
         var appData=storage.get("data_"+name);
         appData.useCount++
@@ -43,15 +46,16 @@ for (var i in list) {
     var item=storage.get("item_"+list[i]);
     var data=storage.get("data_"+list[i]);
     item.tip=""
+    item.localVersion=data.currentVersion
+    if(data.useCount>=5){
+        item.tip="(最常用)"
+    }
     if(item.version!=data.currentVersion){
         if(!data.currentVersion){
             item.tip="从未使用过"
         }else{
-            item.tip="最新版本("+item.version+")"
+            item.tip="有新版本("+item.version+")"
         }
-    }
-    if(data.useCount>=5){
-        item.tip="(最常用)"
     }
     if(item)uiData.push(item)
 }
@@ -71,6 +75,7 @@ var updateCode=function(item,fn){
                 code=res.body.string()
                 var appData=storage.get("data_"+item.name);
                 appData.currentVersion=item.version
+                appData.installTime=new Date().getTime()
                 storage.put("data_"+item.name,appData);
                 storage.put("code_"+item.file,code);
             }else if(res.statusCode==404){
@@ -114,10 +119,10 @@ function getDateDiff(dateTimeStamp){
     return result;
 }
 ui.list.on("item_bind",function(itemView,itemHolder){
-    itemView.info.on("click",function(){
+    itemView.info1.on("click",function(){
         var item=itemHolder.item;
         var appData=storage.get("data_"+item.name);
-        toast("\n"+item.name+"\n使用次数："+appData.useCount+"\n上次使用时间："+getDateDiff(appData.useLast))
+        toast(item.name+"\n使用次数："+appData.useCount+"\n上次使用时间："+getDateDiff(appData.useLast))
     });
     itemView.info2.on("click",function(){
         var item=itemHolder.item;
@@ -128,25 +133,40 @@ ui.list.on("item_bind",function(itemView,itemHolder){
         var item=itemHolder.item;
         var appData=storage.get("data_"+item.name);
         var code=storage.get("code_"+item.file);
-        if(item.version!=appData.currentVersion||!code){
-            //需要下载最新源码
-            toast("更新脚本中("+item.name+")");
-            updateCode(item,function(newCode){
-                if(newCode){
-                    runCode(item.name,newCode);
-                }else{
-                    if(!code){
-                        toast("脚本获取失败！请重试！("+item.name+")");
-                        return;
+        if(!appData.currentVersion&&!code){//第一次使用
+            confirm("从未使用过此脚本，确认运行此脚本吗？").then(value=>{
+                if(!value)return;
+                updateCode(item,function(newCode){
+                    if(newCode){
+                        toast("已开始运行("+item.name+")")
+                        runCode(item.name,newCode);
+                    }else{
+                        toast("下载脚本失败！请检查网络状况！");
                     }
-                    toast("更新失败！为您启动旧版脚本("+item.name+")");
-                    runCode(item.name,code);
-                }
-            })
+                })
+            });
         }else{
-            toast("正在启动最新脚本("+item.name+")")
-            runCode(item.name,code);
+            if(item.version!=appData.currentVersion||!code){
+                //需要下载最新源码
+                toast("更新脚本中("+item.name+")");
+                updateCode(item,function(newCode){
+                    if(newCode){
+                        runCode(item.name,newCode);
+                    }else{
+                        if(!code){
+                            toast("脚本获取失败！请重试！("+item.name+")");
+                            return;
+                        }
+                        toast("更新失败！为您启动旧版脚本("+item.name+")");
+                        runCode(item.name,code);
+                    }
+                })
+            }else{
+                toast("正在启动最新脚本("+item.name+")")
+                runCode(item.name,code);
+            }
         }
+        
     })
 });
 
@@ -154,7 +174,7 @@ ui.list.on("item_bind",function(itemView,itemHolder){
 events.observeKey();
 //监听音量下键弹起
 events.onKeyDown("volume_down", function(event){
-    if (null != exectuion) {
+    if(exectuion) {
         toast('已强制结束任务！')
         exectuion.getEngine().forceStop()
         exectuion = null
@@ -162,13 +182,15 @@ events.onKeyDown("volume_down", function(event){
         toast('还没开车呢！')
     }
 });
-var info = '\n⭕ CHHub 一键仓库\n⭕ 一键完成各种操作\n⭕ 重启可获取最新脚本\n⭕ 运行需要启用无障碍功能\n⭕ 建议设置屏幕常亮时间大于30s\n⭕ 按下音量减可停止运行\n'
-ui.info.setText(info)
-threads.start(function() {
-    while(device.isScreenOn())
-    	sleep(1000)
-    toast('停止运行')
-    if(!exectuion)return;
-    exectuion.getEngine().forceStop()
-    exectuion = null
-})
+var info = '\n⭕ CHHub 一点仓库\n⭕ 一键完成各种操作\n⭕ 重启可获取最新仓库\n⭕ 运行需要启用无障碍功能\n⭕ 建议设置屏幕常亮时间大于30s\n⭕ 按下音量减可停止运行\n'
+ui.text.setText(info)
+// threads.start(function() {
+//     while(1){
+//         while(device.isScreenOn())
+//         	sleep(1000)
+//         toast('停止运行')
+//         if(!exectuion)return;
+//         exectuion.getEngine().forceStop()
+//         exectuion = null
+//     }
+// })
