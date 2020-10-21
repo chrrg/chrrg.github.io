@@ -5,8 +5,8 @@
         "list": [{
             "name": "2020双十一喵喵",
             "file": "files/1.js",
-            "version": 1,
-            "desc": "淘宝自动完成任务"
+            "version": "1.2",
+            "desc": "一键完成双十一任务"
         }]
     }
 }
