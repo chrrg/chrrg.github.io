@@ -1,4 +1,6 @@
 toast("开始任务");
+device.keepScreenOn(3600 * 1000);
+device.keepScreenDim(3600 * 1000)
 try {requiresApi(24);}catch (error){toast('需要在Android 7.0以上版本运行');throw "";}
 auto.waitFor();
 var Package="com.taobao.taobao"
@@ -136,9 +138,13 @@ autoclick([function(){
 }])
 // p(text("浏览双11预售主会场(0/1)").findOnce().parent().parent().parent().children())
 
+var TaskTitle=""
 while(1){
+	if(!text("累计任务奖励").findOnce()){
+		if(text("赚喵币").findOnce())text("赚喵币").findOnce().click()
+	}
 	chfn(function(){
-		return !text(TaskTitle).findOnce()&&text("累计任务奖励").findOnce()
+		return (TaskTitle==""||!text(TaskTitle).findOnce())&&text("累计任务奖励").findOnce()
 	});
 	sml_move(device.width / 2, device.height*0.5, device.width / 2,  device.height*0.1, 500);
 	sleep(100)
@@ -150,7 +156,7 @@ while(1){
 		var child=taskList[i].children();
 		var buttonText=child[1].text()
 		if(buttonText.startsWith("去")){
-			var TaskTitle=child[0].children()[0].text()
+			TaskTitle=child[0].children()[0].text()
 			// console.log(TaskTitle)
 			if(TaskTitle.startsWith("浏览")||TaskTitle.startsWith("逛")||TaskTitle.startsWith("搜")){
 				//找到要运行的任务了
@@ -174,7 +180,9 @@ while(1){
 					return (textContains("全部完成啦").findOnce()||
 						descContains("全部完成啦").findOnce()||
 						textContains("任务完成").findOnce()||
-						descContains("任务完成").findOnce()
+						descContains("任务完成").findOnce()||
+						textContains("任务已完成").findOnce()||
+						descContains("任务已完成").findOnce()
 						);
 				},20000);
 				back()
