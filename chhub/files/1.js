@@ -5,6 +5,7 @@ device.keepScreenDim(3600 * 1000)
 auto.waitFor();
 var Package="com.taobao.taobao"
 var chfn=function(fn,timeout){
+	sleep(100)
 	if(!timeout)timeout=10000//10s
 	var i=0;
 	while(1){
@@ -145,12 +146,16 @@ var getMyCoin=function(){
 			chfn(function(){
 				return text("赚喵币").findOnce()
 			})
-			var coin=getMyCoin()
-			if(!text("赚喵币").findOnce())sleep(1000)
-			text("赚喵币").findOnce().click()
-			chfn(function(){
-				return text("累计任务奖励").findOnce()
-			})
+			var coin
+			if(textContains("我的喵币,").findOnce()){
+				coin=parseInt(textContains("我的喵币,").findOnce().text().split("我的喵币,")[1])
+			}
+			if(text("赚喵币").findOnce()){
+				text("赚喵币").findOnce().click()
+				chfn(function(){
+					return text("累计任务奖励").findOnce()
+				})
+			}
 			return coin
 		}
 	}else if(text("赚喵币").findOnce()){
