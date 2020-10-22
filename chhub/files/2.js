@@ -42,9 +42,11 @@ if(currentPackage()!==Package){
 	chfn(function(){
 		return currentPackage()===Package
 	})
-	chfn(function(){
-		return desc("我的淘宝").findOnce()
-	},20000);
+	if(currentActivity()=="android.widget.FrameLayout"){
+		chfn(function(){
+			return desc("我的淘宝").findOnce()
+		},20000);
+	}
 }
 cur=currentActivity()
 if(cur!="com.taobao.tao.TBMainActivity"&&cur!="com.taobao.browser.BrowserActivity"){
