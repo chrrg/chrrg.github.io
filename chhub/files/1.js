@@ -110,7 +110,7 @@ if(currentPackage()!==Package){
 	if(currentActivity()=="android.widget.FrameLayout"){
 		chfn(function(){
 			return desc("我的淘宝").findOnce()
-		},20000);
+		},25000);
 	}
 }
 cur=currentActivity()
