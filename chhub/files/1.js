@@ -128,7 +128,7 @@ var autoclick=function(arr){
 
 // p(currentActivity());
 
-if(cur!="com.taobao.browser.BrowserActivity"){
+if(cur!="com.taobao.browser.BrowserActivity"||!text("累计任务奖励").findOnce()){
 	autoclick([function(){
 		return text("赚喵币").findOnce()
 	},function(){
@@ -137,6 +137,8 @@ if(cur!="com.taobao.browser.BrowserActivity"){
 		return desc("我的淘宝").findOnce()
 	}])
 }
+if(text("赚喵币").findOnce())text("赚喵币").findOnce().click()
+
 // p(text("浏览双11预售主会场(0/1)").findOnce().parent().parent().parent().children())
 
 var TaskTitle=""
@@ -187,7 +189,9 @@ while(1){
 						descContains("任务已完成").findOnce()
 						);
 				},22000);
+				sleep(500+1000*Math.random())
 				back()
+				sleep(1000)
 				break;
 			}
 		}

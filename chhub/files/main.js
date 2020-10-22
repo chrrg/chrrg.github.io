@@ -56,7 +56,7 @@ setTimeout(function(){
 		    }
 		}
 	}catch(e){toast("获取更新失败！请检查网络！");}
-	console.log(engines.execScriptFile("ui.js"));
+	engines.execScriptFile("ui.js")
 	setTimeout(function(){
 		loading.getEngine().forceStop()
 	},1000)
