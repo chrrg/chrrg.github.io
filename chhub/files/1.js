@@ -79,7 +79,9 @@ function sml_move(qx, qy, zx, zy, time) {
         xxyy = [parseInt(newPoint.x), parseInt(newPoint.y)]
         xxy.push(xxyy);
     }
-    gesture.apply(null, xxy);
+    try{
+	    gesture.apply(null, xxy);
+	}catch(e){}
 };
 var p=console.log;
 pp=function(data,offset,size){
