@@ -71,10 +71,6 @@ var getMyCoin=function(){
 				return text("赚喵币").findOnce()
 			})
 			var coin=getMyCoin()
-			// text("赚喵币").findOnce().click()
-			// chfn(function(){
-			// 	return text("累计任务奖励").findOnce()
-			// })
 			return coin
 		}
 	}else if(text("赚喵币").findOnce()){
@@ -91,12 +87,24 @@ if(cur!="com.taobao.browser.BrowserActivity"||!text("累计任务奖励").findOn
 		return desc("我的淘宝").findOnce()
 	}])
 }
+if(text("累计任务奖励").findOnce()){
+	if(text("关闭").findOnce()){
+		text("关闭").findOnce().click()
+		chfn(function(){
+			return text("赚喵币").findOnce()
+		})
+	}
+}
 chfn(function(){
 	return text("赚喵币").findOnce()
 })
+sleep(1000)
 var oldCoin=getMyCoin()
 var startTime=new Date().getTime()
 toast("现在您有"+oldCoin+"喵币\n现在开始撸猫！")
+chfn(function(){
+	return text("我的猫，点击撸猫").findOnce()
+})
 while(1){
 	var obj=text("我的猫，点击撸猫").findOnce()
 	if(obj){
