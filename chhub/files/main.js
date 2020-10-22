@@ -1,7 +1,68 @@
-// console.log(text("赚喵币").findOnce())
-// exit()
-// engines.execScriptFile("1.js");
-// exit()
+engines.execScriptFile("2.js");
+exit()
+var p=console.log;
+if(confirm("问题检测","喵币数量未变化，是否为您停止任务？")){
+	alert("已正常停止")
+	exit()
+}
+exit()
+pp=function(data,offset,size){
+	for(var i=offset;i<offset+size;i++){
+		sleep(10);
+		if(i>=data.length)return;
+		p(data[i].id()+"|"+data[i].text()+"|"+data[i].desc()+"|"+data[i].className());
+	}
+}
+var Package="com.taobao.taobao"
+var chfn=function(fn,timeout){
+	if(!timeout)timeout=10000//10s
+	var i=0;
+	while(1){
+		var result=fn()
+		if(result){
+			return result;
+		}else{
+			sleep(500);
+			if(i++>(timeout/500)){
+				toast("任务步骤超时，请重新运行！");
+				// sleep(1000);
+				// throw "";
+				throw "";
+			}
+		}
+	}
+}
+var getMyCoin=function(){
+	if(text("累计任务奖励").findOnce()){
+		if(text("关闭").findOnce()){
+			text("关闭").findOnce().click()
+			chfn(function(){
+				return text("赚喵币").findOnce()
+			})
+			var coin=getMyCoin()
+			text("赚喵币").findOnce().click()
+			chfn(function(){
+				return text("累计任务奖励").findOnce()
+			})
+			return coin
+		}
+	}else if(text("赚喵币").findOnce()){
+		if(textContains("我的喵币,").findOnce()){
+			return parseInt(textContains("我的喵币,").findOnce().text().split("我的喵币,")[1])
+		}
+	}
+}
+
+
+console.log(getMyCoin())
+console.log(getMyCoin())
+console.log(getMyCoin())
+
+// text("我的猫，点击撸猫").findOnce().click()
+// pp(packageName("com.taobao.taobao").find(),0,500);
+// console.log()
+exit()
+
 //仓库
 var storage = storages.create("caohongchrrg@qq.com:chhub");
 if(!storage.get("readme")){

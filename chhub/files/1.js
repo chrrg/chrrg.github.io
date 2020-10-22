@@ -89,7 +89,15 @@ pp=function(data,offset,size){
 		p(data[i].id()+"|"+data[i].text()+"|"+data[i].desc()+"|"+data[i].className());
 	}
 }
+
 // p(currentPackage());
+// p(currentPackage());
+
+var current=currentPackage()
+if(!current||current==="com.android.systemui"){
+	back();
+	sleep(2000)
+}
 
 if(currentPackage()!==Package){
 	//需要启动tb
@@ -114,6 +122,7 @@ if(cur!="com.taobao.tao.TBMainActivity"&&cur!="com.taobao.browser.BrowserActivit
 // 	back();
 // 	sleep(1000);
 // }
+
 var autoclick=function(arr){
 	for(var i=0;i<arr.length;i++){
 		var result=arr[i]();
@@ -125,7 +134,26 @@ var autoclick=function(arr){
 		}
 	}
 }
-
+var getMyCoin=function(){
+	if(text("累计任务奖励").findOnce()){
+		if(text("关闭").findOnce()){
+			text("关闭").findOnce().click()
+			chfn(function(){
+				return text("赚喵币").findOnce()
+			})
+			var coin=getMyCoin()
+			text("赚喵币").findOnce().click()
+			chfn(function(){
+				return text("累计任务奖励").findOnce()
+			})
+			return coin
+		}
+	}else if(text("赚喵币").findOnce()){
+		if(textContains("我的喵币,").findOnce()){
+			return parseInt(textContains("我的喵币,").findOnce().text().split("我的喵币,")[1])
+		}
+	}
+}
 // p(currentActivity());
 
 if(cur!="com.taobao.browser.BrowserActivity"||!text("累计任务奖励").findOnce()){
@@ -137,19 +165,40 @@ if(cur!="com.taobao.browser.BrowserActivity"||!text("累计任务奖励").findOn
 		return desc("我的淘宝").findOnce()
 	}])
 }
-if(text("赚喵币").findOnce())text("赚喵币").findOnce().click()
+
 
 // p(text("浏览双11预售主会场(0/1)").findOnce().parent().parent().parent().children())
 
 var TaskTitle=""
+var currentCoin=getMyCoin()
+var oldCoin=currentCoin
+toast("现在您有"+oldCoin+"喵币")
 while(1){
-	if(!text("累计任务奖励").findOnce()){
-		if(text("赚喵币").findOnce())
-			text("赚喵币").findOnce().click()
+	sleep(1000)
+	if(text("赚喵币").findOnce()){
+		text("赚喵币").findOnce().click()
+		chfn(function(){
+			return text("累计任务奖励").findOnce()
+		})
+	}
+	var coin=getMyCoin()
+	if(TaskTitle){
+		if(coin==oldCoin){
+			if(confirm("问题检测","喵币数量未变化，是否为您停止任务？")){
+				toast("已正常停止")
+				exit()
+			}
+		}
+		toast("增加喵币："+(coin-oldCoin))
+		oldCoin=coin
 	}
 	chfn(function(){
-		return (TaskTitle==""||!text(TaskTitle).findOnce())&&text("累计任务奖励").findOnce()
+		return text("累计任务奖励").findOnce()
 	});
+	chfn(function(){
+		return TaskTitle==""||!text(TaskTitle).findOnce()
+	});
+	
 	sml_move(device.width / 2, device.height*0.5, device.width / 2,  device.height*0.1, 500);
 	sleep(100)
 	sml_move(device.width / 2, device.height*0.5, device.width / 2,  device.height*0.8, 500);
@@ -198,8 +247,12 @@ while(1){
 	}//for
 	if(isFinish)break;//任务完成
 }
-toast("任务完成！")
-device.vibrate(500)
+if(oldCoin>currentCoin){
+	device.vibrate(2000)
+	alert("任务完成！","任务前喵币数量："+currentCoin+"现在数量："+oldCoin+"\n为您增加"+(oldCoin-currentCoin)+"喵币")
+}
+alert("任务已全部完成！")
+
 exit()
 // pp(packageName(Package).find(),0,500);
 

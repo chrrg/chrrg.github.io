@@ -5,8 +5,13 @@
         "list": [{
             "name": "2020双十一喵喵",
             "file": "files/1.js",
-            "version": "1.6",
+            "version": "1.7",
             "desc": "一键完成淘宝喵币任务"
+        },{
+            "name": "全自动淘宝撸猫",
+            "file": "files/2.js",
+            "version": "1.0",
+            "desc": "猫猫自动点击得喵币"
         }]
     }
 }
