@@ -1,3 +1,4 @@
+// alert("123213","123213")
 engines.execScriptFile("1.js");
 exit()
 var p=console.log;

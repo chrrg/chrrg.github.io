@@ -1,7 +1,7 @@
 toast("开始任务");
 device.keepScreenOn(3600 * 1000);
 device.keepScreenDim(3600 * 1000)
-try {requiresApi(24);}catch (error){toast('需要在Android 7.0以上版本运行');throw "";}
+//try {requiresApi(24);}catch (error){toast('需要在Android 7.0以上版本运行');throw "";}
 auto.waitFor();
 var Package="com.taobao.taobao"
 var chfn=function(fn,timeout){
