@@ -146,6 +146,7 @@ var getMyCoin=function(){
 				return text("赚喵币").findOnce()
 			})
 			var coin=getMyCoin()
+			sleep(200)
 			text("赚喵币").findOnce().click()
 			chfn(function(){
 				return text("累计任务奖励").findOnce()
