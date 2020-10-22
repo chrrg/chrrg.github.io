@@ -170,7 +170,7 @@ if(cur!="com.taobao.browser.BrowserActivity"||!text("累计任务奖励").findOn
 
 
 // p(text("浏览双11预售主会场(0/1)").findOnce().parent().parent().parent().children())
-
+sleep(1000)
 var TaskTitle=""
 var currentCoin=getMyCoin()
 var oldCoin=currentCoin
@@ -251,10 +251,10 @@ while(1){
 }
 if(oldCoin>currentCoin){
 	device.vibrate(2000)
-	alert("任务完成！","任务前喵币数量："+currentCoin+"现在数量："+oldCoin+"\n为您增加"+(oldCoin-currentCoin)+"喵币")
+	toast("任务完成","任务前喵币数量："+currentCoin+"现在数量："+oldCoin+"\n为您增加"+(oldCoin-currentCoin)+"喵币")
 }
-alert("任务已全部完成！")
-
+device.vibrate(500)
+toast("任务已全部完成！")
 exit()
 // pp(packageName(Package).find(),0,500);
 
