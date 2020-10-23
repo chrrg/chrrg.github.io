@@ -2,6 +2,9 @@
     "code": 200,
     "msg": "",
     "data": {
+        "HubRoot":"https://chrrg.github.io/chhub/",
+        "version":3,
+        "ui":["ui.js",1],
         "list": [{
             "name": "2020双十一喵喵",
             "file": "files/1.js",
