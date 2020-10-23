@@ -28,13 +28,14 @@ ui.layout(
 //
 var storage = storages.create("caohongchrrg@qq.com:chhub");
 
-var list=api.getExtras().hubData
+
+var list=api.getExtras().hubData.list
+
+
 var exectuion = null
 var runCode=function(name,code){
-    if(exectuion){
-        exectuion.getEngine().forceStop()
-    }
     try{
+        if(exectuion)exectuion.getEngine().forceStop();
         var appData=storage.get("data_"+name);
         appData.useCount++
         appData.useLast=new Date().getTime()
@@ -44,8 +45,16 @@ var runCode=function(name,code){
 };
 var uiData=[]
 for (var i in list) {
-    var item=storage.get("item_"+list[i]);
-    var data=storage.get("data_"+list[i]);
+    var data=storage.get("data_"+list[i].name);
+    if(!data){
+        storage.put("data_"+list[i].name,data={
+            "installTime":new Date().getTime(),//安装时间
+            "useCount":0,//使用次数
+            "useLast":0,//上次使用时间
+            "currentVersion":"",//当前版本号
+        });
+    }
+    item=list[i]
     item.tip=""
     item.localVersion=data.currentVersion
     if(data.useCount>=5){

@@ -3,7 +3,7 @@
     "msg": "",
     "data": {
         "HubRoot":"https://chrrg.github.io/chhub/hub.json",
-        "ui":["ui.js",3],
+        "ui":["ui.js",4],
         "list": [{
             "name": "2020双十一喵喵",
             "file": "files/1.js",
