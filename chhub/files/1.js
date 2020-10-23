@@ -191,6 +191,7 @@ while(1){
 			return text("累计任务奖励").findOnce()
 		})
 	}
+	if(text("领取奖励").findOnce()){text("领取奖励").findOnce().click();sleep(5000);}
 	var coin=getMyCoin()
 	if(TaskTitle){
 		if(coin==oldCoin){
