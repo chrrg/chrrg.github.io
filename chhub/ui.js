@@ -27,10 +27,8 @@ ui.layout(
 )
 //
 api.setApi(function(){
-    console.log("注入成功");
-    global.obj.api.finish=function(){
-        
-    }
+    global.api.uniqueId=global.obj.uniqueId;
+    global.api.apiVersion=1
 })
 var storage = storages.create("caohongchrrg@qq.com:chhub");
 var list=api.getExtras().hubData.list
@@ -44,7 +42,7 @@ var runCode=function(id,code){
         appData.useLast=new Date().getTime()
         storage.put("data_"+id,appData);
     }catch(e){}
-    exectuion=engines.execScript(name, code);
+    exectuion=engines.execScript(id, code);
 };
 var reSetData=function(){
     var uiData=[]

@@ -23,7 +23,6 @@ api.getApi=function(data){
 				}
 			}
 		})()
-		console.log(uniqueId)
 		if(uniqueId=="app_ui")//root应用可以设置
 			global.api.setApi=function(code){
 				obj.apiCode=myapi.wrapFuncString(code).replace(/[\r\n]/g, "")
@@ -48,13 +47,12 @@ api.getApi=function(data){
 					if(config&&config.extras)extras=config.extras
 					code+=myapi.getApi({uniqueId:uniqueId+"_"+name,extras:extras});
 					if(obj.apiCode)code+=obj.apiCode;
-					code+=";global.obj=null;";
+					code+=";global.obj=void 0;";
 					code+=script;
 					return global.tempengines.execScript(name, code, config);
 				}
 			}
 		})()
-
 
 	},data).replace(/[\r\n]/g, "");
 }

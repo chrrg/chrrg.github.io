@@ -1,5 +1,5 @@
 var api=require("api.js");
-var storage = storages.create("github.com-chrrg-oneClickHub");
+// storages.remove("github.com-chrrg-oneClickHub")
 // wrapCodeRun(files.read("ui.js"),{
 // 	uniqueId:"app_ui",
 // 	extras:{
@@ -7,23 +7,25 @@ var storage = storages.create("github.com-chrrg-oneClickHub");
 // 	}
 // });
 // exit()
-if(!storage.get("readme")){
-	alert("欢迎使用","本软件可以一键自动完成各种任务\n运行需要启用无障碍服务！\n若失效请关闭无障碍服务再开启，或者重启手机！\n若闪退请卸载重装！");
-	alert("启用无障碍服务","请在接下来弹出来的界面中启用本软件的无障碍服务")
-	auto.waitFor();
-	storage.put("readme",new Date().getTime())
-}else{
-	toast("欢迎使用一点仓库！运行需要启用无障碍服务！\n若失效请关闭无障碍服务再开启，或者重启手机！\n若闪退请卸载重装！");
-}
 
+var eula = storages.create("github.com-chrrg-oneClickHub-eula");
+if(!eula.get("readme")){
+	if(!confirm("欢迎使用","本软件是完全免费且开源的\n任何人可以上传或下载脚本\n请自行辨别脚本安全\n作者不承担任何责任\nhttps://github.com/chrrg/oneClickHub/\n若不同意请点击取消")){toast("必须点击确定才能继续使用！");engines.stopAll();exit();}
+	alert("启用无障碍服务","请在接下来弹出来的界面中启用本软件的无障碍服务");
+	toast("欢迎使用一点仓库！运行需要启用无障碍服务！\n若失效请重启无障碍服务或手机！");
+	auto.waitFor();
+	eula.put("readme",new Date().getTime())
+}else toast("欢迎使用一点仓库！运行需要启用无障碍服务！\n若失效请重启无障碍服务或手机！");
+
+var storage = storages.create("github.com-chrrg-oneClickHub");
 var officialHub="https://chrrg.github.io/chhub/hub.json"//官方仓库地址
 function getPath(path){return path.substr(0,path.lastIndexOf('/')+1);}//路径去掉文件名
 
 var curHub=storage.get("myHub")//当前使用的仓库
 if(!curHub){curHub=officialHub;storage.put("myHub",curHub)}
 function isOfficalHub(){return curHub==officialHub}//当前仓库是否官方
-function ifUnOfficialThenNoticeSwitch(text){if(!isOfficalHub()){if(confirm("温馨提醒",text)){curHub=officialHub;storage.put("myHub",curHub)}}}
-ifUnOfficialThenNoticeSwitch("您正在使用非官方仓库："+curHub+"\n是否为您切换回官方仓库？")
+function ifUnOfficialThenNoticeSwitch(text){if(!isOfficalHub()){if(confirm("温馨提醒",text)){storages.remove("github.com-chrrg-oneClickHub");toast("已切换，请重启一点仓库！");engines.stopAll();exit();}}}
+ifUnOfficialThenNoticeSwitch("您正在使用非官方仓库："+curHub+"\n是否为您重置到官方仓库？")
 
 var getRemoteCode=function(url,fn){
 	var res=http.get(url, {});

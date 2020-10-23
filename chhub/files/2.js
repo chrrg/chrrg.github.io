@@ -1,4 +1,5 @@
 toast("开始任务");
+if(typeof api==="undefined")toast("一点仓库有更新了！快更新吧！");
 device.keepScreenOn(3600 * 1000);
 device.keepScreenDim(3600 * 1000)
 // try {requiresApi(24);}catch (error){toast('需要在Android 7.0以上版本运行');throw "";}
