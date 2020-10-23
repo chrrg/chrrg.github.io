@@ -181,6 +181,9 @@ if(cur!="com.taobao.browser.BrowserActivity"||!text("累计任务奖励").findOn
 sleep(1000)
 var TaskTitle=""
 var currentCoin=getMyCoin()
+if(!currentCoin)currentCoin=getMyCoin()
+if(!currentCoin)currentCoin=getMyCoin()
+
 var oldCoin=currentCoin
 toast("现在您有"+oldCoin+"喵币")
 while(1){
@@ -193,6 +196,7 @@ while(1){
 	}
 	if(text("领取奖励").findOnce()){text("领取奖励").findOnce().click();sleep(5000);}
 	var coin=getMyCoin()
+	if(!currentCoin&&coin)currentCoin=coin
 	if(TaskTitle){
 		if(coin==oldCoin){
 			if(confirm("问题检测","喵币数量未变化，是否为您停止任务？")){
