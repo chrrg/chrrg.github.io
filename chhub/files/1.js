@@ -210,7 +210,7 @@ while(1){
 	});
 	
 	sml_move(device.width / 2, device.height*0.5, device.width / 2,  device.height*0.1, 500);
-	sleep(100)
+	sleep(100+100*Math.random())
 	sml_move(device.width / 2, device.height*0.5, device.width / 2,  device.height*0.8, 500);
 	var taskList=text("累计任务奖励").findOnce().parent().parent().parent().children()
 	taskList.splice(0,1)
@@ -226,31 +226,32 @@ while(1){
 				isFinish=false;
 				toast(TaskTitle)
 				child[1].click()//执行任务
-				sleep(2000)
-				sml_move(device.width / 2, device.height*0.8, device.width / 2,  device.height*0.1, 862);
-
-				chfn(function(){
-					return textMatches(/.*?浏览\d+秒.*?/).findOnce()||descMatches(/.*?浏览\d+秒.*?/).findOnce()
-				},20000);
-				toast("任务已开始！")
-				sleep(1000);
-
-				sml_move(device.width / 2, device.height*0.8, device.width / 2,  device.height*0.1, 1562);
-				sleep(2000);
-				sml_move(device.width / 2, device.height*0.8, device.width / 2,  device.height*0.1, 2268);
-
-				chfn(function(){
-					return (textContains("全部完成啦").findOnce()||
-						descContains("全部完成啦").findOnce()||
-						textContains("任务完成").findOnce()||
-						descContains("任务完成").findOnce()||
-						textContains("任务已完成").findOnce()||
-						descContains("任务已完成").findOnce()
-						);
-				},22000);
+				sleep(2000+1000*Math.random())
+				sml_move(device.width / 2, device.height*0.8, device.width / 2,  device.height*0.1, 262+Math.random()*100);
+				try{
+					chfn(function(){
+						return textMatches(/.*?浏览\d+秒.*?/).findOnce()||descMatches(/.*?浏览\d+秒.*?/).findOnce()
+					},20000);
+					toast("任务已开始！")
+					sleep(1000+(Math.random()*1000)|0);
+					sml_move(device.width / 2, device.height*0.8, device.width / 2,  device.height*0.1, 262+Math.random()*100);
+					sleep(2000+(Math.random()*1000)|0)
+					sml_move(device.width / 2, device.height*0.8, device.width / 2,  device.height*0.1, 262+Math.random()*100);
+				}catch(e){sleep(1000)}
+				try{
+					chfn(function(){
+						return (textContains("全部完成啦").findOnce()||
+							descContains("全部完成啦").findOnce()||
+							textContains("任务完成").findOnce()||
+							descContains("任务完成").findOnce()||
+							textContains("任务已完成").findOnce()||
+							descContains("任务已完成").findOnce()
+							);
+					},22000);
+				}catch(e){}
 				sleep(500+1000*Math.random())
 				back()
-				sleep(1000)
+				sleep(1000+1000*Math.random())
 				break;
 			}
 		}

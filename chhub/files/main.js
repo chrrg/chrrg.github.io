@@ -1,19 +1,22 @@
 // alert("123213","123213")
-engines.execScriptFile("1.js");
-exit()
+// engines.execScriptFile("1.js");
+
 var p=console.log;
-if(confirm("问题检测","喵币数量未变化，是否为您停止任务？")){
-	alert("已正常停止")
-	exit()
-}
-exit()
-pp=function(data,offset,size){
+// if(confirm("问题检测","喵币数量未变化，是否为您停止任务？")){
+// 	alert("已正常停止")
+// 	exit()
+// }
+// exit()
+function pp(data,offset,size){
+	var p=console.log;
 	for(var i=offset;i<offset+size;i++){
 		sleep(10);
 		if(i>=data.length)return;
 		p(data[i].id()+"|"+data[i].text()+"|"+data[i].desc()+"|"+data[i].className());
 	}
 }
+pp(packageName("com.taobao.taobao").find(),0,500);
+exit()
 var Package="com.taobao.taobao"
 var chfn=function(fn,timeout){
 	if(!timeout)timeout=10000//10s
