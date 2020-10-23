@@ -5,11 +5,13 @@
         "HubRoot":"https://chrrg.github.io/chhub/hub.json",
         "ui":["ui.js",4],
         "list": [{
+            "id":1,
             "name": "2020双十一喵喵",
             "file": "files/1.js",
             "version": "1.8.5",
             "desc": "一键完成淘宝喵币任务"
         },{
+            "id":2,
             "name": "全自动淘宝撸猫",
             "file": "files/2.js",
             "version": "1.2.3",

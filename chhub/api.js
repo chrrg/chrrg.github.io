@@ -7,9 +7,9 @@ api.wrapFuncString=wrapFuncString
 api.getApi=function(data){
 	return wrapFuncString(function(data){
 		console.log("应用的输入：",data);
+
 		var uniqueId=data.uniqueId
 		global.api=(function(){
-			var obj={};
 			return {
 				getMyId(){
 					return uniqueId
@@ -32,6 +32,16 @@ api.getApi=function(data){
 				}
 			}
 		})()
+		// var tempengines=global.engines
+		// global.engines=(function(){
+		// 	return {
+		// 		execScript(name, script, config){
+		// 			return tempengines.execScript(name, script, config)
+		// 		},remove(str){
+		// 			return tempstorages.remove("appdata_"+uniqueId)
+		// 		}
+		// 	}
+		// })
 
 	},data).replace(/[\r\n]/g, "");
 }

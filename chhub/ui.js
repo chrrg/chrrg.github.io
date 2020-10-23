@@ -27,51 +27,52 @@ ui.layout(
 )
 //
 var storage = storages.create("caohongchrrg@qq.com:chhub");
-
-
 var list=api.getExtras().hubData.list
 
-
 var exectuion = null
-var runCode=function(name,code){
+var runCode=function(id,code){
     try{
         if(exectuion)exectuion.getEngine().forceStop();
-        var appData=storage.get("data_"+name);
+        var appData=storage.get("data_"+id);
         appData.useCount++
         appData.useLast=new Date().getTime()
-        storage.put("data_"+name,appData);
+        storage.put("data_"+id,appData);
     }catch(e){}
     exectuion=engines.execScript(name, code);
 };
-var uiData=[]
-for (var i in list) {
-    var data=storage.get("data_"+list[i].name);
-    if(!data){
-        storage.put("data_"+list[i].name,data={
-            "installTime":new Date().getTime(),//安装时间
-            "useCount":0,//使用次数
-            "useLast":0,//上次使用时间
-            "currentVersion":"",//当前版本号
-        });
-    }
-    item=list[i]
-    item.tip=""
-    item.localVersion=data.currentVersion
-    if(data.useCount>=5){
-        item.tip="(最常用)"
-    }
-    if(item.version!=data.currentVersion){
-        if(!data.currentVersion){
-            item.tip="从未使用过"
-        }else{
-            item.tip="有新版本("+item.version+")"
+var reSetData=function(){
+    var uiData=[]
+    for (var i in list) {
+        var data=storage.get("data_"+list[i].id);
+        if(!data){
+            storage.put("data_"+list[i].id,data={
+                "installTime":new Date().getTime(),//安装时间
+                "useCount":0,//使用次数
+                "useLast":0,//上次使用时间
+                "currentVersion":"",//当前版本号
+            });
         }
+        item=list[i]
+        item.tip=""
+        item.localVersion=data.currentVersion
+        if(data.useCount>=5){
+            item.tip="(最常用)"
+        }
+        if(item.version!=data.currentVersion){
+            if(!data.currentVersion){
+                item.tip="从未使用过"
+            }else{
+                item.tip="有新版本("+item.version+")"
+            }
+        }
+        if(item)uiData.push(item)
     }
-    if(item)uiData.push(item)
+    try{
+        ui.list.setDataSource(uiData);//设置ui
+    }catch(e){}
 }
-try{
-    ui.list.setDataSource(uiData);//设置ui
-}catch(e){}
+reSetData()
+setInterval(reSetData,10000)
 
 var updateCode=function(item,fn){
     try{
@@ -83,11 +84,11 @@ var updateCode=function(item,fn){
             var code;
             if(res.statusCode==200){
                 code=res.body.string()
-                var appData=storage.get("data_"+item.name);
+                var appData=storage.get("data_"+item.id);
                 appData.currentVersion=item.version
                 appData.installTime=new Date().getTime()
-                storage.put("data_"+item.name,appData);
-                storage.put("code_"+item.file,code);
+                storage.put("data_"+item.id,appData);
+                storage.put("code_"+item.id,code);
             }else if(res.statusCode==404){
                 toast("脚本暂未上传，稍后再试试吧！");
             }else{
@@ -125,31 +126,31 @@ function getDateDiff(dateTimeStamp){
         result+=parseInt(hourC) +"小时前";
     else if(minC>=1)
         result+=parseInt(minC) +"分钟前";
-    else result="刚刚";
+    else return "刚刚"
     return result;
 }
 ui.list.on("item_bind",function(itemView,itemHolder){
     itemView.info1.on("click",function(){
         var item=itemHolder.item;
-        var appData=storage.get("data_"+item.name);
+        var appData=storage.get("data_"+item.id);
         toast(item.name+"\n使用次数："+appData.useCount+"\n上次使用时间："+getDateDiff(appData.useLast))
     });
     itemView.info2.on("click",function(){
         var item=itemHolder.item;
-        var appData=storage.get("data_"+item.name);
+        var appData=storage.get("data_"+item.id);
         toast("安装时间："+getDateDiff(appData.installTime)+"\n"+item.desc)
     });
     itemView.open.on("click",function(){
         var item=itemHolder.item;
-        var appData=storage.get("data_"+item.name);
-        var code=storage.get("code_"+item.file);
+        var appData=storage.get("data_"+item.id);
+        var code=storage.get("code_"+item.id);
         if(!appData.currentVersion&&!code){//第一次使用
             confirm("从未使用过此脚本，确认运行此脚本吗？").then(value=>{
                 if(!value)return;
                 updateCode(item,function(newCode){
                     if(newCode){
                         toast("已开始运行("+item.name+")")
-                        runCode(item.name,newCode);
+                        runCode(item.id,newCode);
                     }else{
                         toast("下载脚本失败！请检查网络状况！");
                     }
@@ -161,19 +162,19 @@ ui.list.on("item_bind",function(itemView,itemHolder){
                 toast("更新脚本中("+item.name+")");
                 updateCode(item,function(newCode){
                     if(newCode){
-                        runCode(item.name,newCode);
+                        runCode(item.id,newCode);
                     }else{
                         if(!code){
                             toast("脚本获取失败！请重试！("+item.name+")");
                             return;
                         }
                         toast("更新失败！为您启动旧版脚本("+item.name+")");
-                        runCode(item.name,code);
+                        runCode(item.id,code);
                     }
                 })
             }else{
                 toast("正在启动最新脚本("+item.name+")")
-                runCode(item.name,code);
+                runCode(item.id,code);
             }
         }
         
@@ -194,6 +195,8 @@ events.onKeyDown("volume_down", function(event){
 });
 var info = '\n⭕ CHHub 一点仓库\n⭕ 一键完成各种操作\n⭕ 重启可获取最新仓库\n⭕ 运行需要启用无障碍功能\n⭕ 建议设置屏幕常亮时间大于30s\n⭕ 按下音量减可停止运行\n'
 ui.text.setText(info)
+
+
 // threads.start(function() {
 //     while(1){
 //         while(device.isScreenOn())
