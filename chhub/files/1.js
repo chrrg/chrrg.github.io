@@ -259,12 +259,11 @@ while(1){
 	}//for
 	if(isFinish)break;//任务完成
 }
-if(oldCoin>currentCoin){
-	device.vibrate(2000)
-	toast("任务完成","任务前喵币数量："+currentCoin+"现在数量："+oldCoin+"\n为您增加"+(oldCoin-currentCoin)+"喵币")
-}
 device.vibrate(500)
-toast("任务已全部完成！")
+if(oldCoin>currentCoin){
+	confirm("任务完成","共增加"+(oldCoin-currentCoin)+"喵币")
+}
+confirm("任务完成","任务已全部完成！")
 exit()
 // pp(packageName(Package).find(),0,500);
 

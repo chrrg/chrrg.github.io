@@ -102,6 +102,7 @@ chfn(function(){
 })
 sleep(1000)
 var oldCoin=getMyCoin()
+var hisCoin=oldCoin
 var startTime=new Date().getTime()
 toast("现在您有"+oldCoin+"喵币\n现在开始撸猫！")
 chfn(function(){
@@ -114,11 +115,15 @@ while(1){
 		sleep(100+Math.random()*100)
 		coin=getMyCoin()
 		
-		if(new Date().getTime()-startTime>10000){
+		if(new Date().getTime()-startTime>20000){
 			startTime=new Date().getTime()
 			if(coin==oldCoin){
-				device.vibrate(2000)
-				toast("喵币没变化了，任务停止！")
+				device.vibrate(500)
+				if(coin-hisCoin>0){
+					confirm("任务完成","喵币没变化了，共增加"+(coin-hisCoin)+"喵币！")
+				}else{
+					confirm("任务完成","喵币没变化，任务结束！")
+				}
 				exit()
 			}
 			oldCoin=coin
