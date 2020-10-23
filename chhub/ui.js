@@ -26,6 +26,12 @@ ui.layout(
     </vertical>
 )
 //
+api.setApi(function(){
+    console.log("注入成功");
+    global.obj.api.finish=function(){
+        
+    }
+})
 var storage = storages.create("caohongchrrg@qq.com:chhub");
 var list=api.getExtras().hubData.list
 

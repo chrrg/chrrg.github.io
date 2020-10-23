@@ -52,7 +52,7 @@ function getUICode(hubData,fn){
 function wrapCodeRun(code,data){
 	var is_ui="";
 	if(code.startsWith('"ui";'))is_ui='"ui";'
-	return engines.execScript("task_"+data.uniqueId, is_ui+api.getApi(data)+code);
+	return engines.execScript(data.uniqueId, is_ui+api.getApi(data)+"global.obj=null;"+code);
 }
 try{
 	getHubData(function(response){
@@ -67,7 +67,7 @@ try{
 		getUICode(data,function(ui_code){
 			if(!ui_code)throw "";
 			wrapCodeRun(ui_code,{
-				uniqueId:"ui",
+				uniqueId:"app_ui",
 				extras:{
 					hubData:data
 				}

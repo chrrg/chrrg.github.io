@@ -16,6 +16,12 @@
             "file": "files/2.js",
             "version": "1.2.3",
             "desc": "猫猫自动点击得喵币"
+        },{
+            "id":3,
+            "name": "测试",
+            "file": "files/3.js",
+            "version": "1.0.0",
+            "desc": "一点仓库测试"
         }]
     }
 }

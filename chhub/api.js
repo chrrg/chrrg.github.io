@@ -6,42 +6,51 @@ var wrapFuncString=function(fn,data){
 api.wrapFuncString=wrapFuncString
 api.getApi=function(data){
 	return wrapFuncString(function(data){
-		console.log("应用的输入：",data);
-
-		var uniqueId=data.uniqueId
+		global.obj={}
+		var obj=global.obj
+		obj.data=data
+		obj.apiCode=""
+		var myapi=require("api.js")
+		obj.myapi=myapi;
+		var uniqueId=data.uniqueId//
 		global.api=(function(){
 			return {
-				getMyId(){
+				getId(){
 					return uniqueId
 				},
 				getExtras(){
 					return data.extras
-				},
-				test(){
-					toast("666")
 				}
 			}
 		})()
-		var tempstorages=global.storages
+		if(uniqueId=="app_ui")//root应用可以设置
+			global.api.setApi=function(code){
+				throw "应用权限不足！";
+				obj.apiCode=wrapFuncString(code).replace(/[\r\n]/g, "")
+			}
+		global.tempstorages=global.storages
 		global.storages=(function(){
 			return {
 				create(str){
-					return tempstorages.create("appdata_"+uniqueId)
+					return global.tempstorages.create("appdata_"+uniqueId)
 				},remove(str){
-					return tempstorages.remove("appdata_"+uniqueId)
+					return global.tempstorages.remove("appdata_"+uniqueId)
 				}
 			}
 		})()
-		// var tempengines=global.engines
-		// global.engines=(function(){
-		// 	return {
-		// 		execScript(name, script, config){
-		// 			return tempengines.execScript(name, script, config)
-		// 		},remove(str){
-		// 			return tempstorages.remove("appdata_"+uniqueId)
-		// 		}
-		// 	}
-		// })
+		global.tempengines=global.engines
+		global.engines=(function(){
+			return {
+				execScript(name, script, config){
+					var is_ui=""
+					if(script.startsWith('"ui";'))is_ui='"ui";'
+					var extras
+					if(config&&config.extras)extras=config.extras
+					return global.tempengines.execScript(name, is_ui+myapi.getApi({uniqueId:uniqueId+"_"+name,extras})+obj.apiCode+"global.obj=null;"+script, config)
+				}
+			}
+		})
+
 
 	},data).replace(/[\r\n]/g, "");
 }
