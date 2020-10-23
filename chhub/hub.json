@@ -2,7 +2,7 @@
     "code": 200,
     "msg": "",
     "data": {
-        "HubRoot":"https://chrrg.github.io/chhub/",
+        "HubRoot":"https://chrrg.github.io/chhub/hub.json",
         "version":3,
         "ui":["ui.js",1],
         "list": [{

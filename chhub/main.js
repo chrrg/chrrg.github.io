@@ -8,7 +8,7 @@
 // exit()
 
 var api=require("api.js");
-var storage = storages.create("https://github.com/chrrg/oneClickHub");
+var storage = storages.create("github.com-chrrg-oneClickHub");
 if(!storage.get("readme")){
 	alert("欢迎使用","本软件可以一键自动完成各种任务\n运行需要启用无障碍服务！\n若失效请关闭无障碍服务再开启，或者重启手机！\n若闪退请卸载重装！");
 	alert("启用无障碍服务","请在接下来弹出来的界面中启用本软件的无障碍服务")
@@ -18,7 +18,9 @@ if(!storage.get("readme")){
 	toast("欢迎使用一点仓库！运行需要启用无障碍服务！\n若失效请关闭无障碍服务再开启，或者重启手机！\n若闪退请卸载重装！");
 }
 
-var officialHub="https://chrrg.github.io/chhub/"//官方仓库地址
+var officialHub="https://chrrg.github.io/chhub/hub.json"//官方仓库地址
+function getPath(path){return path.substr(0,path.lastIndexOf('/')+1);}//路径去掉文件名
+
 var curHub=storage.get("myHub")//当前使用的仓库
 if(!curHub){curHub=officialHub;storage.put("myHub",curHub)}
 function isOfficalHub(){return curHub==officialHub}//当前仓库是否官方
@@ -27,7 +29,7 @@ ifUnOfficialThenNoticeSwitch("您正在使用非官方仓库："+curHub+"\n是�
 
 var getRemoteCode=function(url,fn){
 	try{
-		var r = http.get(url, {},function(res,err){
+		http.get(url, {},function(res,err){
 			try{
 				if(err){console.error(err);return;}
 				if(res.statusCode != 200){toast("请求失败: " + res.statusCode + " " + res.statusMessage);throw "";}//网络错误
@@ -36,10 +38,10 @@ var getRemoteCode=function(url,fn){
 		});
 	}catch(e){toast("系统出错！")}
 }
-function responseToString(response){return res.body.string()}
-function responseToJson(response){return res.body.json()}
-function getHubPath(){return curHub+"hub.json"}
-function getHubData(fn){getRemoteCode(getHubPath+"?appVersion="+appVersion,function(response){if(!response)fn(null);var res=responseToJson(response);fn(res)})}
+function responseToString(response){return response.body.string()}
+function responseToJson(response){return response.body.json()}
+function getHubPath(){return curHub}
+function getHubData(fn){getRemoteCode(getHubPath(),function(response){if(!response)fn(null);var res=responseToJson(response);fn(res)})}
 auto.waitFor();
 var loading=engines.execScriptFile("loading.js");
 function getUICode(hubData,fn){
@@ -61,20 +63,20 @@ function wrapCodeRun(code,uniqueId,data){
 	if(code.startsWith('"ui";'))is_ui='"ui";'
 	return engines.execScript("task_"+uniqueId, is_ui+api.getApi(data)+code);
 }
-var hubFn=function(response){
+
+getHubData(function(response){
+	console.log(response)
 	if(!response)throw ""
 	if(response.code!=200){toast(response.text);throw "";}//规范 不为200就要提醒用户
 	if(!response.data)throw "";
 	var data=response.data;
-	if(!data.HubRoot)throw "";
 	if(data.HubRoot!=getHubPath())throw ""
 	if(!data.list)throw "";
 	if(!data.ui)throw "";
 	storage.put("hubData",data);
 	getUICode(function(ui_code){
-		if(!ui_code){
-			throw "";
-		}
+		if(!ui_code)throw "";
+		loading.getEngine().forceStop()
 		wrapCodeRun(ui_code,{
 			uniqueId:"ui",
 			extras:{
@@ -82,6 +84,4 @@ var hubFn=function(response){
 			}
 		})
 	})
-};
-
-getHubData(hubFn)
+})
