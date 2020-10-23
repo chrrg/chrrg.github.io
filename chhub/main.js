@@ -28,20 +28,15 @@ function ifUnOfficialThenNoticeSwitch(text){if(!isOfficalHub()){if(confirm("温�
 ifUnOfficialThenNoticeSwitch("您正在使用非官方仓库："+curHub+"\n是否为您切换回官方仓库？")
 
 var getRemoteCode=function(url,fn){
-	try{
-		http.get(url, {},function(res,err){
-			try{
-				if(err){console.error(err);return;}
-				if(res.statusCode != 200){toast("请求失败: " + res.statusCode + " " + res.statusMessage);throw "";}//网络错误
-				fn(res)
-			}catch(e){fn(null)}
-		});
-	}catch(e){toast("系统出错！")}
+	var res=http.get(url, {});
+	if(!res)throw "err";
+	if(res.statusCode != 200){toast("请求失败: " + res.statusCode + " " + res.statusMessage);throw "";}//网络错误
+	fn(res);
 }
 function responseToString(response){return response.body.string()}
 function responseToJson(response){return response.body.json()}
 function getHubPath(){return curHub}
-function getHubData(fn){getRemoteCode(getHubPath(),function(response){if(!response)fn(null);var res=responseToJson(response);fn(res)})}
+function getHubData(fn){getRemoteCode(getHubPath(),function(response){var res=responseToJson(response);fn(res)})}
 auto.waitFor();
 var loading=engines.execScriptFile("loading.js");
 function getUICode(hubData,fn){
@@ -49,13 +44,12 @@ function getUICode(hubData,fn){
 	var ui_version=storage.get("ui_version")
 	var ui_code=storage.get("ui_code")
 	if(ui_code&&ui_version==hubData.ui[1]){fn(ui_code);return}//不需要更新
-	getRemoteCode(hubData.HubRoot+hubData.ui[0],function(response){
-		if(!response)fn(null);var res=responseToString(response);
-		storage.put("ui_version",ui_version);
-		storage.put("ui_code",ui_code);
+	getRemoteCode(getPath(hubData.HubRoot)+hubData.ui[0],function(response){
+		var res=responseToString(response);
+		storage.put("ui_version",hubData.ui[1]);
+		storage.put("ui_code",res);
 		fn(res);
 	});
-	fn(ui_code);
 }
 function wrapCodeRun(code,uniqueId,data){
 	var is_ui="";
@@ -63,25 +57,38 @@ function wrapCodeRun(code,uniqueId,data){
 	if(code.startsWith('"ui";'))is_ui='"ui";'
 	return engines.execScript("task_"+uniqueId, is_ui+api.getApi(data)+code);
 }
-
-getHubData(function(response){
-	console.log(response)
-	if(!response)throw ""
-	if(response.code!=200){toast(response.text);throw "";}//规范 不为200就要提醒用户
-	if(!response.data)throw "";
-	var data=response.data;
-	if(data.HubRoot!=getHubPath())throw ""
-	if(!data.list)throw "";
-	if(!data.ui)throw "";
-	storage.put("hubData",data);
-	getUICode(function(ui_code){
-		if(!ui_code)throw "";
-		loading.getEngine().forceStop()
-		wrapCodeRun(ui_code,{
-			uniqueId:"ui",
-			extras:{
-				hubData:data
-			}
+try{
+	getHubData(function(response){
+		toast("仓库数据获取成功！")
+		if(response.code!=200){toast(response.text);throw "";}//规范 不为200就要提醒用户
+		if(!response.data)throw "";
+		var data=response.data;
+		if(data.HubRoot!=getHubPath())throw ""
+		if(!data.list)throw "";
+		if(!data.ui)throw "";
+		storage.put("hubData",data);
+		getUICode(data,function(ui_code){
+			if(!ui_code)throw "";
+			wrapCodeRun(ui_code,{
+				uniqueId:"ui",
+				extras:{
+					hubData:data
+				}
+			});
+			loading.getEngine().forceStop()
 		})
 	})
-})
+}catch(e){
+	toast("网络异常，仓库数据获取失败！"+e)
+	var ui_code=storage.get("ui_code")
+	var data=storage.get("hubData")
+	if(data.HubRoot!=getHubPath())ui_code=""
+	if(!ui_code){alert("请连接网络后重新打开！");engines.stopAll();exit()}
+	wrapCodeRun(ui_code,{
+		uniqueId:"ui",
+		extras:{
+			hubData:data
+		}
+	});
+	if(loading.getEngine())loading.getEngine().forceStop()
+}

@@ -12,6 +12,9 @@ api.getApi=function(data){
 			getMyId(){
 				return data.uniqueId
 			},
+			getExtras(){
+				return data.extras
+			},
 			test(){
 				toast("666")
 			}
