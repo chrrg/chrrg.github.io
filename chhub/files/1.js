@@ -224,7 +224,13 @@ while(1){
 		if(buttonText.startsWith("去")){
 			TaskTitle=child[0].children()[0].text()
 			// console.log(TaskTitle)
-			if(TaskTitle.startsWith("浏览")||TaskTitle.startsWith("逛")||TaskTitle.startsWith("搜")||TaskTitle.startsWith("双")){
+			if(TaskTitle.startsWith("每日签到")){
+				isFinish=false;
+				toast(TaskTitle)
+				child[1].click()//执行任务
+				sleep(3000+1000*Math.random())
+				break;
+			}else if(TaskTitle.startsWith("浏览")||TaskTitle.startsWith("逛")||TaskTitle.startsWith("搜")||TaskTitle.startsWith("双")){
 				//找到要运行的任务了
 				isFinish=false;
 				toast(TaskTitle)
