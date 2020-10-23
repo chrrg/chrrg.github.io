@@ -1,12 +1,12 @@
 var api=require("api.js");
 var storage = storages.create("github.com-chrrg-oneClickHub");
-wrapCodeRun(files.read("ui.js"),{
-	uniqueId:"ui",
-	extras:{
-		hubData:storage.get("hubData")
-	}
-});
-exit()
+// wrapCodeRun(files.read("ui.js"),{
+// 	uniqueId:"app_ui",
+// 	extras:{
+// 		hubData:storage.get("hubData")
+// 	}
+// });
+// exit()
 if(!storage.get("readme")){
 	alert("欢迎使用","本软件可以一键自动完成各种任务\n运行需要启用无障碍服务！\n若失效请关闭无障碍服务再开启，或者重启手机！\n若闪退请卸载重装！");
 	alert("启用无障碍服务","请在接下来弹出来的界面中启用本软件的无障碍服务")
@@ -82,7 +82,7 @@ try{
 	if(data.HubRoot!=getHubPath())ui_code=""
 	if(!ui_code){alert("请连接网络后重新打开！");engines.stopAll();exit()}
 	wrapCodeRun(ui_code,{
-		uniqueId:"ui",
+		uniqueId:"app_ui",
 		extras:{
 			hubData:data
 		}
