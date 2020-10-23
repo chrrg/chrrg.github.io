@@ -5,20 +5,34 @@ var wrapFuncString=function(fn,data){
 }
 api.wrapFuncString=wrapFuncString
 api.getApi=function(data){
-	return "api="+wrapFuncString(function(data){
-		var obj;
-		console.log(data)
-		return {
-			getMyId(){
-				return data.uniqueId
-			},
-			getExtras(){
-				return data.extras
-			},
-			test(){
-				toast("666")
+	return wrapFuncString(function(data){
+		console.log("应用的输入：",data);
+		var uniqueId=data.uniqueId
+		global.api=(function(){
+			var obj={};
+			return {
+				getMyId(){
+					return uniqueId
+				},
+				getExtras(){
+					return data.extras
+				},
+				test(){
+					toast("666")
+				}
 			}
-		}
+		})()
+		var tempstorages=global.storages
+		global.storages=(function(){
+			return {
+				create(str){
+					return tempstorages.create("appdata_"+uniqueId)
+				},remove(str){
+					return tempstorages.remove("appdata_"+uniqueId)
+				}
+			}
+		})()
+
 	},data).replace(/[\r\n]/g, "");
 }
 module.exports = api;

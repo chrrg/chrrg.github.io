@@ -51,11 +51,10 @@ function getUICode(hubData,fn){
 		fn(res);
 	});
 }
-function wrapCodeRun(code,uniqueId,data){
+function wrapCodeRun(code,data){
 	var is_ui="";
-	code=code.trim();
 	if(code.startsWith('"ui";'))is_ui='"ui";'
-	return engines.execScript("task_"+uniqueId, is_ui+api.getApi(data)+code);
+	return engines.execScript("task_"+data.uniqueId, is_ui+api.getApi(data)+code);
 }
 try{
 	getHubData(function(response){

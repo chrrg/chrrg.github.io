@@ -25,9 +25,9 @@ ui.layout(
         </list>
     </vertical>
 )
+//
+var storage = storages.create("caohongchrrg@qq.com:chhub");
 
-// var storage = storages.create("caohongchrrg@qq.com:chhub");
-// var list=storage.get("list");//获取缓存
 var list=api.getExtras().hubData
 var exectuion = null
 var runCode=function(name,code){
