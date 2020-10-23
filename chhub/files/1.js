@@ -199,10 +199,8 @@ while(1){
 	if(!currentCoin&&coin)currentCoin=coin
 	if(TaskTitle){
 		if(coin==oldCoin){
-			if(confirm("问题检测","喵币数量未变化，是否为您停止任务？")){
-				toast("已正常停止")
-				exit()
-			}
+			toast("问题检测","喵币数量未变化，已为您停止任务")
+			exit()
 		}
 		toast("增加喵币："+(coin-oldCoin))
 		oldCoin=coin
@@ -263,11 +261,11 @@ while(1){
 	}//for
 	if(isFinish)break;//任务完成
 }
-device.vibrate(500)
-if(oldCoin>currentCoin){
-	confirm("任务完成","共增加"+(oldCoin-currentCoin)+"喵币")
-}
-confirm("任务完成","任务已全部完成！")
+device.vibrate(1000)
+if(oldCoin>currentCoin)
+	toast("任务完成","共增加"+(oldCoin-currentCoin)+"喵币")
+else
+	toast("任务完成","任务已全部完成！")
 exit()
 // pp(packageName(Package).find(),0,500);
 

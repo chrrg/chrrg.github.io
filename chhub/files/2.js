@@ -118,19 +118,19 @@ while(1){
 		if(new Date().getTime()-startTime>20000){
 			startTime=new Date().getTime()
 			if(coin==oldCoin){
-				device.vibrate(500)
+				device.vibrate(1000)
 				if(coin-hisCoin>0){
-					confirm("任务完成","喵币没变化了，共增加"+(coin-hisCoin)+"喵币！")
+					toast("任务完成:喵币没变化了，共增加"+(coin-hisCoin)+"喵币！")
 				}else{
-					confirm("任务完成","喵币没变化，任务结束！")
+					toast("任务完成:喵币没变化，任务结束！")
 				}
-				exit()
+				//exit()
 			}
 			oldCoin=coin
 		}
 		
 	}else{
-		device.vibrate(1000)
+		device.vibrate(200)
 		toast("猫跑丢了，任务停止！")
 		exit()
 	}

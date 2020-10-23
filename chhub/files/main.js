@@ -1,7 +1,8 @@
 // alert("123213","123213")
 // engines.execScriptFile("1.js");
-
+// alert("666")
 // exit()
+
 var p=console.log;
 // if(confirm("问题检测","喵币数量未变化，是否为您停止任务？")){
 // 	alert("已正常停止")
