@@ -12,8 +12,8 @@ toast("5秒后自动开始点击("+x+","+y+")")
 sleep(5000)
 var current=currentPackage()
 while(1){
-	sleep((duration+Math.random()*20)|0);
-	press(x,y,(50+Math.random()*20)|0);
+	sleep(duration+Math.random()*20);
+	press(x,y,10+Math.random()*5);
 	if(current!=currentPackage()){
 		toast("检测到切换应用，已为您停止执行！")
 		exit()
