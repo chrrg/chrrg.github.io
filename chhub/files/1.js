@@ -197,15 +197,15 @@ while(1){
 	}
 	if(text("领取奖励").findOnce()){text("领取奖励").findOnce().click();sleep(5000);}
 	var coin=getMyCoin()
-	if(!currentCoin&&coin)currentCoin=coin
 	if(TaskTitle){
 		if(coin==oldCoin){
-			toast("问题检测","喵币数量未变化，已为您停止任务")
+			toast("喵币数量未变化，已为您停止任务")
 			exit()
 		}
 		toast("增加喵币："+(coin-oldCoin))
 		oldCoin=coin
 	}
+	if(!currentCoin&&coin)currentCoin=coin
 	chfn(function(){
 		return text("累计任务奖励").findOnce()
 	});
@@ -222,7 +222,7 @@ while(1){
 	for(var i=0;i<taskList.length;i++){
 		var child=taskList[i].children();
 		var buttonText=child[1].text()
-		if(buttonText.startsWith("去")){
+		if(buttonText.startsWith("去")||buttonText=="签到"){
 			TaskTitle=child[0].children()[0].text()
 			// console.log(TaskTitle)
 			if(TaskTitle.startsWith("每日签到")){
