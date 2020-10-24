@@ -125,7 +125,7 @@ while(1){
 				}else{
 					toast("任务完成:喵币没变化，任务结束！")
 				}
-				//exit()
+				exit()
 			}
 			oldCoin=coin
 		}
