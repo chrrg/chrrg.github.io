@@ -33,7 +33,7 @@
             "id":5,
             "name": "屏幕连点器",
             "file": "files/5.js",
-            "version": "1.0.2",
+            "version": "1.0.3",
             "desc": "屏幕连点器"
         }]
     }
