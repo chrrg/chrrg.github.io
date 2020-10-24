@@ -1,6 +1,6 @@
 var width=device.width
 var height=device.height
-alert("欢迎使用屏幕连点器！","您的设备分辨率为\nx:"+width+",y:"+height+"\n注：屏幕左上角为0点，横轴x、纵轴y")
+alert("欢迎使用屏幕连点器！","您的设备分辨率为\nx:"+width+",y:"+height+"\n注：屏幕左上角为0点\n横轴x、纵轴y")
 var x = rawInput("请输入需要连点的X坐标", width);
 if(!x)exit()
 var y = rawInput("请输入需要连点的Y坐标", height);
@@ -13,7 +13,7 @@ sleep(5000)
 var current=currentPackage()
 while(1){
 	sleep(duration);
-	click(x,y);
+	press(x,y,1);
 	if(current!=currentPackage()){
 		toast("检测到切换应用，已为您停止执行！")
 		exit()
