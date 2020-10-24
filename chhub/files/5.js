@@ -1,6 +1,6 @@
 var width=device.width
 var height=device.height
-alert("欢迎使用屏幕连点器！","您的设备分辨率为\nx:"+width+",y:"+height+"\n注：屏幕左上角为0点\n横轴x、纵轴y")
+alert("欢迎使用屏幕连点器！","您的设备分辨率为\nx:"+width+",y:"+height+"\n注：屏幕左上角为0点\n横轴x、纵轴y\n如果不确定坐标可以打开开发者选项的指针位置")
 var x = rawInput("请输入需要连点的X坐标", width);
 if(!x)exit()
 var y = rawInput("请输入需要连点的Y坐标", height);
