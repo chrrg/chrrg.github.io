@@ -2,7 +2,8 @@
 // swipe(500, 500, 505,400, 20)
 // pp(packageName(currentPackage()).find(),0,500);
 // exit()
-
+// console.log(currentActivity())
+// exit()
 runTest(1);exit();
 
 // exit();

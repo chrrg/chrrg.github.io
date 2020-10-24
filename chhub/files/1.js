@@ -109,10 +109,34 @@ if(currentPackage()!==Package){
 	chfn(function(){
 		return currentPackage()===Package
 	})
-	if(currentActivity()=="android.widget.FrameLayout"){
+	if(packageName(currentPackage()).find().length==0){//说明是新开淘宝
+		chfn(function(){
+			sleep(100)
+			return packageName(currentPackage()).find().length
+		})
+		sleep(1000)//给充足的时间加载
 		chfn(function(){
 			return desc("我的淘宝").findOnce()
 		},25000);
+	}else{
+		if(desc("我的淘宝").findOnce()){//说明在首页
+
+		}else{//需要返回才能到达首页
+			if(currentActivity()=="android.widget.FrameLayout"){}
+			chfn(function(){
+				if(currentPackage()!==Package){
+					app.launch(Package)
+					sleep(200)
+				}
+				if(desc("我的淘宝").findOnce()){
+					return true;
+				}else{
+					back();
+					sleep(200);
+				}
+			},25000);
+
+		}
 	}
 }
 cur=currentActivity()
@@ -182,7 +206,7 @@ if(cur!="com.taobao.browser.BrowserActivity"||!text("累计任务奖励").findOn
 sleep(1000)
 var TaskTitle=""
 var currentCoin=getMyCoin()
-if(!currentCoin)currentCoin=getMyCoin()
+if(!currentCoin)sleep(500)
 if(!currentCoin)currentCoin=getMyCoin()
 
 var oldCoin=currentCoin
@@ -209,9 +233,11 @@ while(1){
 	chfn(function(){
 		return text("累计任务奖励").findOnce()
 	});
-	chfn(function(){
-		return TaskTitle==""||!text(TaskTitle).findOnce()
-	});
+	try{
+		chfn(function(){
+			return TaskTitle==""||!text(TaskTitle).findOnce()
+		});
+	}catch(e){}
 	
 	sml_move(device.width / 2, device.height*0.5, device.width / 2,  device.height*0.1, 500);
 	sleep(100+100*Math.random())
@@ -237,16 +263,20 @@ while(1){
 				toast(TaskTitle)
 				child[1].click()//执行任务
 				sleep(2000+1000*Math.random())
-				sml_move(device.width / 2, device.height*0.8, device.width / 2,  device.height*0.1, 262+Math.random()*100);
+				if(!TaskTitle.startsWith("看")&&!TaskTitle.startsWith("观看"))
+					sml_move(device.width / 2, device.height*0.8, device.width / 2,  device.height*0.1, 262+Math.random()*100);
+				
 				try{
 					chfn(function(){
 						return textMatches(/.*?浏览\d+秒.*?/).findOnce()||descMatches(/.*?浏览\d+秒.*?/).findOnce()
 					},20000);
 					toast("任务已开始！")
 					sleep(1000+(Math.random()*1000)|0);
-					sml_move(device.width / 2, device.height*0.8, device.width / 2,  device.height*0.1, 262+Math.random()*100);
+					if(!TaskTitle.startsWith("看")&&!TaskTitle.startsWith("观看"))
+						sml_move(device.width / 2, device.height*0.8, device.width / 2,  device.height*0.1, 262+Math.random()*100);
 					sleep(2000+(Math.random()*1000)|0)
-					sml_move(device.width / 2, device.height*0.8, device.width / 2,  device.height*0.1, 262+Math.random()*100);
+					if(!TaskTitle.startsWith("看")&&!TaskTitle.startsWith("观看"))
+						sml_move(device.width / 2, device.height*0.8, device.width / 2,  device.height*0.2, 162+Math.random()*100);
 				}catch(e){sleep(1000)}
 				try{
 					chfn(function(){
