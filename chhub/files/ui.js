@@ -72,6 +72,7 @@ var reSetData=function(){
         
         item.tip=""
         item.localVersion=data.currentVersion
+        if(!item.localVersion)item.localVersion="无"
         if(data.useCount>=5){
             item.tip="(最常用)"
         }
