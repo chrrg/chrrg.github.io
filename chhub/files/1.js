@@ -231,7 +231,7 @@ while(1){
 				child[1].click()//执行任务
 				sleep(3000+1000*Math.random())
 				break;
-			}else if(TaskTitle.startsWith("浏览")||TaskTitle.startsWith("逛")||TaskTitle.startsWith("搜")||TaskTitle.startsWith("双")){
+			}else if(TaskTitle.startsWith("浏览")||TaskTitle.startsWith("逛")||TaskTitle.startsWith("搜")||TaskTitle.startsWith("双")||TaskTitle.startsWith("看")||TaskTitle.startsWith("观看")){
 				//找到要运行的任务了
 				isFinish=false;
 				toast(TaskTitle)
