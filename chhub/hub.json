@@ -29,6 +29,12 @@
             "file": "files/4.js",
             "version": "1.0.0",
             "desc": "钉钉一键打卡"
+        },{
+            "id":5,
+            "name": "屏幕连点器",
+            "file": "files/5.js",
+            "version": "1.0.0",
+            "desc": "屏幕连点器"
         }]
     }
 }
