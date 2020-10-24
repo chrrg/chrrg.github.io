@@ -3,7 +3,7 @@
     "msg": "",
     "data": {
         "HubRoot":"https://chrrg.github.io/chhub/hub.json",
-        "ui":["files/ui.js",6],
+        "ui":["files/ui.js",7],
         "list": [{
             "id":1,
             "name": "2020双十一喵喵",
@@ -18,10 +18,17 @@
             "desc": "猫猫自动点击得喵币"
         },{
             "id":3,
+            "hidden":true,
             "name": "测试",
             "file": "files/3.js",
             "version": "1.0.1",
             "desc": "一点仓库测试"
+        },{
+            "id":4,
+            "name": "钉钉一键打卡",
+            "file": "files/4.js",
+            "version": "1.0.0",
+            "desc": "钉钉一键打卡"
         }]
     }
 }

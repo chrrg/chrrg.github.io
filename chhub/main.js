@@ -1,6 +1,14 @@
-var api=require("api.js");
+// engines.execScriptFile("files/4.js");exit();
+// swipe(500, 500, 505,400, 20)
+// pp(packageName(currentPackage()).find(),0,500);
+// exit()
+
+runTest(4);exit();
+
+// exit();
+
 // storages.remove("github.com-chrrg-oneClickHub")
-// wrapCodeRun(files.read("ui.js"),{
+// wrapCodeRun(files.read("files/ui.js"),{
 // 	uniqueId:"app_ui",
 // 	extras:{
 // 		hubData:storage.get("hubData")
@@ -16,7 +24,15 @@ if(!eula.get("readme")){
 	auto.waitFor();
 	eula.put("readme",new Date().getTime())
 }else toast("欢迎使用一点仓库！运行需要启用无障碍服务！\n若失效请重启无障碍服务或手机！");
-
+function runTest(id){
+	var hubData=storages.create("github.com-chrrg-oneClickHub").get("hubData")
+	if(!hubData)throw "需要先获取仓库数据才能运行测试！";
+	wrapCodeRun(files.read("files/ui.js"),{uniqueId:"app_ui",extras:{hubData:hubData,testRun:id}});
+}
+function pp(data,offset,size){
+	for(var i=offset;i<offset+size;i++){sleep(10);if(i>=data.length)return;
+	console.log(data[i].id()+"|"+data[i].text()+"|"+data[i].desc()+"|"+data[i].className());}
+}
 var storage = storages.create("github.com-chrrg-oneClickHub");
 var officialHub="https://chrrg.github.io/chhub/hub.json"//官方仓库地址
 function getPath(path){return path.substr(0,path.lastIndexOf('/')+1);}//路径去掉文件名
@@ -52,6 +68,7 @@ function getUICode(hubData,fn){
 	});
 }
 function wrapCodeRun(code,data){
+	var api=require("api.js");
 	var is_ui="";
 	if(code.startsWith('"ui";'))is_ui='"ui";'
 	return engines.execScript(data.uniqueId, is_ui+api.getApi(data)+"global.obj=null;"+code);

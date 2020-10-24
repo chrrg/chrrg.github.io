@@ -26,6 +26,10 @@ ui.layout(
     </vertical>
 )
 //
+if(!api.setApi){
+    toast("应用权限不足，无法启动ui！");
+    exit();
+}
 api.setApi(function(){
     global.api.uniqueId=global.obj.uniqueId;
     global.api.apiVersion=1
@@ -44,19 +48,28 @@ var runCode=function(id,code){
     }catch(e){}
     exectuion=engines.execScript(id, code);
 };
+var test=api.getExtras().testRun
+if(test){
+    setTimeout(function(){
+        runCode(4,files.read("files/"+test+".js"))
+        exit();
+    },0)
+}
 var reSetData=function(){
     var uiData=[]
     for (var i in list) {
-        var data=storage.get("data_"+list[i].id);
+        var item=list[i]
+        if(item.hidden)continue;
+        var data=storage.get("data_"+item.id);
         if(!data){
-            storage.put("data_"+list[i].id,data={
+            storage.put("data_"+item.id,data={
                 "installTime":new Date().getTime(),//安装时间
                 "useCount":0,//使用次数
                 "useLast":0,//上次使用时间
                 "currentVersion":"",//当前版本号
             });
         }
-        item=list[i]
+        
         item.tip=""
         item.localVersion=data.currentVersion
         if(data.useCount>=5){
