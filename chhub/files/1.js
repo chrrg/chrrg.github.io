@@ -170,11 +170,16 @@ var getMyCoin=function(){
 			text("关闭").findOnce().click()
 			chfn(function(){
 				return text("赚喵币").findOnce()
-			})
-			var coin
-			if(textContains("我的喵币,").findOnce()){
+			});
+			try{
+				chfn(function(){
+					return textContains("我的喵币,").findOnce()
+				})
+			}catch(e){};
+
+			var coin=null;
+			if(textContains("我的喵币,").findOnce())
 				coin=parseInt(textContains("我的喵币,").findOnce().text().split("我的喵币,")[1])
-			}
 			if(text("赚喵币").findOnce()){
 				text("赚喵币").findOnce().click()
 				chfn(function(){
@@ -222,7 +227,7 @@ while(1){
 	if(text("领取奖励").findOnce()){text("领取奖励").findOnce().click();sleep(5000);}
 	var coin=getMyCoin()
 	if(TaskTitle){
-		if(coin==oldCoin){
+		if(oldCoin&&coin==oldCoin){
 			toast("喵币数量未变化，已为您停止任务")
 			exit()
 		}
