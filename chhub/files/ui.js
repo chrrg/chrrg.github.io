@@ -31,13 +31,14 @@ if(!api.setApi){
     exit();
 }
 api.setApi(function(){
-    global.api.uniqueId=global.obj.uniqueId;
-    global.api.apiVersion=1;
-    global.raw={};
-    global.raw.requestScreenCapture=requestScreenCapture;
-    requestScreenCapture=function(){
+    var obj=global.obj;
+    api.uniqueId=obj.uniqueId;
+    api.apiVersion=1
+    obj.raw=obj.raw||{}
+    obj.raw.requestScreenCapture=images.requestScreenCapture;
+    requestScreenCapture=images.requestScreenCapture=function(){
         try{
-            if(global.raw.requestScreenCapture())return true;else return false;
+            if(obj.raw.requestScreenCapture())return true;else return false;
         }catch(e){};
         var i=0;
         while(1){
@@ -46,10 +47,37 @@ api.setApi(function(){
                 return true;
             }catch(e){};
             sleep(500);
-            if(i++>20)return false;
+            if(i++>10)return false;
         }
     };
-});//里面不要有注释，不能缺少分号!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    api.ui=function(selector,offset,size){
+        if(typeof selector==="undefined")selector=packageName(currentPackage())
+        if(typeof offset==="undefined")offset=0
+        if(typeof size==="undefined")size=500
+        var data=selector.find()
+        var length=offset+size
+        if(length>data.length)length=data.length
+        console.log("█".repeat(30))
+        console.log("index|id|text|desc|className|"+length+":["+offset+"-"+length+"]Start")
+        for(var i=offset;i<length;i++){
+            sleep(10);
+            console.log(i+"|"+data[i].id()+"|"+data[i].text()+"|"+data[i].desc()+"|"+data[i].className());
+        }
+        console.log("index|id|text|desc|className|"+length+":["+offset+"-"+length+"]End")
+        console.log("█".repeat(30))
+    }
+    api.setHubPath=function(path){//修改为第三方仓库地址
+        try{
+            var storage=obj.raw.storages.create("github.com-chrrg-oneClickHub");
+            obj.raw.storages.remove("github.com-chrrg-oneClickHub");
+            storage.put("myHub",path)
+            toast("请重启一点仓库！");
+            obj.raw.engines.stopAll();
+            exit();
+        }catch(e){}
+        return false;
+    }
+});
 var storage = storages.create("caohongchrrg@qq.com:chhub");
 var list=api.getExtras().hubData.list
 
@@ -67,7 +95,7 @@ var runCode=function(id,code){
 var test=api.getExtras().testRun
 if(test){
     setTimeout(function(){
-        runCode(4,files.read("files/"+test+".js"))
+        runCode(test,files.read("files/"+test+".js"))
         exit();
     },0)
 }

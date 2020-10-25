@@ -163,7 +163,7 @@ ui.stop.on("click",function(){
 function main() {
     // 这里写脚本的主逻辑
     threads.start(function () {
-        if(!requestScreenCapture()){
+        if(!images.requestScreenCapture()){
             toastLog("请先开启截图权限，以执行收藏任务！");
             return;
         }
