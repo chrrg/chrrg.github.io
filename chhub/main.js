@@ -3,7 +3,10 @@
 // pp(packageName(currentPackage()).find(),0,500);
 // exit()
 // console.log(currentActivity())
-// exit()
+
+// toastLog(requestScreenCapture())
+
+// exit();
 runTest(6);exit();
 
 // exit();

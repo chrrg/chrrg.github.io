@@ -32,8 +32,24 @@ if(!api.setApi){
 }
 api.setApi(function(){
     global.api.uniqueId=global.obj.uniqueId;
-    global.api.apiVersion=1
-})
+    global.api.apiVersion=1;
+    global.raw={};
+    global.raw.requestScreenCapture=requestScreenCapture;
+    requestScreenCapture=function(){
+        try{
+            if(global.raw.requestScreenCapture())return true;else return false;
+        }catch(e){};
+        var i=0;
+        while(1){
+            try{
+                images.captureScreen();
+                return true;
+            }catch(e){};
+            sleep(500);
+            if(i++>20)return false;
+        }
+    };
+});//里面不要有注释，不能缺少分号!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 var storage = storages.create("caohongchrrg@qq.com:chhub");
 var list=api.getExtras().hubData.list
 

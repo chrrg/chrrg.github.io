@@ -163,12 +163,10 @@ ui.stop.on("click",function(){
 function main() {
     // 这里写脚本的主逻辑
     threads.start(function () {
-        try{
-            if(!requestScreenCapture()){
-                toastLog("请先开启截图权限，以执行收藏任务！");
-                return;
-            }
-        }catch(e){toast("截图权限申请出错")}
+        if(!requestScreenCapture()){
+            toastLog("请先开启截图权限，以执行收藏任务！");
+            return;
+        }
         try {
             //启动悬浮窗日志
             console.show();
