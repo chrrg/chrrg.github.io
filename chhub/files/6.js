@@ -214,7 +214,7 @@ function getTaskList() {
         sleep(1000);
         toastLog("等待加载...")
     }
-    // sleep(8000);
+    sleep(8000);
     // 获取任务列表
     taskInfoList = []; // 重置
     className("android.widget.ListView").findOne().children().forEach(function (child) {
