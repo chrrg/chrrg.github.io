@@ -4,7 +4,7 @@
 // exit()
 // console.log(currentActivity())
 // exit()
-runTest(1);exit();
+runTest(6);exit();
 
 // exit();
 
