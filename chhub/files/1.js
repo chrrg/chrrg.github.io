@@ -1,3 +1,4 @@
+alert("注意：","请使用淘宝旧版本9.5.7防止脚本检测！\n否则喵币将降到1/100！\n新版淘宝脚本检测原理：getEnabledAccessibilityServiceList");
 toast("开始任务");
 device.keepScreenOn(3600 * 1000);
 device.keepScreenDim(3600 * 1000)
@@ -208,7 +209,7 @@ if(cur!="com.taobao.browser.BrowserActivity"||!text("累计任务奖励").findOn
 
 
 // p(text("浏览双11预售主会场(0/1)").findOnce().parent().parent().parent().children())
-sleep(1000)
+sleep(3000)
 var TaskTitle=""
 var currentCoin=getMyCoin()
 if(!currentCoin)sleep(500)
