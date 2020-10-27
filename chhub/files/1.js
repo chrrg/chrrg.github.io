@@ -1,4 +1,4 @@
-alert("注意：","请使用淘宝旧版本9.5.7防止脚本检测！\n否则喵币将降到1/100！\n新版淘宝脚本检测原理：getEnabledAccessibilityServiceList");
+alert("注意：","请使用淘宝(9.5.7)防止脚本检测！\n否则喵币将降到1/100！\n新版淘宝脚本检测原理：getEnabledAccessibilityServiceList\n若使用新版，关闭无障碍即可恢复正常");
 toast("开始任务");
 device.keepScreenOn(3600 * 1000);
 device.keepScreenDim(3600 * 1000)
