@@ -1,11 +1,12 @@
 //这个文件平时可以做测试使用
 
 
+runTestUI();
 // console.log("开始测试");//在这里也可以测试一些代码
 // allDom();//显示所有控件
 // runTest(6);//输入6代表测试6.js
 
-// exit();//测试时请加上这行，下面是软件的源码，勿改
+exit();//测试时请加上这行，下面是软件的源码，勿改
 var eula = storages.create("github.com-chrrg-oneClickHub-eula");
 if(!eula.get("readme")){
 	if(!confirm("欢迎使用","本软件是完全免费且开源的\n任何人可以上传或下载脚本\n请自行辨别脚本安全\n作者不承担任何责任\nhttps://github.com/chrrg/oneClickHub/\n若不同意请点击取消")){toast("必须点击确定才能继续使用！");engines.stopAll();exit();}
@@ -14,6 +15,11 @@ if(!eula.get("readme")){
 	auto.waitFor();
 	eula.put("readme",new Date().getTime())
 }else toast("欢迎使用一点仓库！运行需要启用无障碍服务！\n若失效请重启无障碍服务或手机！");
+function runTestUI(){
+	var hubData=storages.create("github.com-chrrg-oneClickHub").get("hubData")
+	if(!hubData)throw "需要先获取仓库数据才能运行测试！";
+	wrapCodeRun(files.read("files/ui.js"),{uniqueId:"app_ui",extras:{hubData:hubData}});
+}
 function runTest(id){
 	var hubData=storages.create("github.com-chrrg-oneClickHub").get("hubData")
 	if(!hubData)throw "需要先获取仓库数据才能运行测试！";
@@ -31,8 +37,7 @@ function getPath(path){return path.substr(0,path.lastIndexOf('/')+1);}//路径�
 var curHub=storage.get("myHub")//当前使用的仓库
 if(!curHub){curHub=officialHub;storage.put("myHub",curHub)}
 function isOfficalHub(){return curHub==officialHub}//当前仓库是否官方
-function ifUnOfficialThenNoticeSwitch(text){if(!isOfficalHub()){if(confirm("温馨提醒",text)){storages.remove("github.com-chrrg-oneClickHub");curHub=officialHub;storage.put("myHub",curHub);}}}
-ifUnOfficialThenNoticeSwitch("您正在使用第三方仓库："+curHub+"请自行辨别是否安全！\n是否需要重置到官方仓库？")
+function ifUnOfficialThenNoticeSwitch(text){if(!isOfficalHub()){if(confirm("温馨提醒",text)){storages.remove("github.com-chrrg-oneClickHub");curHub=officialHub;storage.put("myHub",curHub);toast("请重启生效！");}}}
 
 var getRemoteCode=function(url,fn){
 	var res=http.get(url, {});
@@ -89,6 +94,7 @@ try{
 	})
 }catch(e){
 	toast("仓库数据获取失败！\n"+e)
+	ifUnOfficialThenNoticeSwitch("数据获取失败！您正在使用第三方仓库："+curHub+"！\n是否需要切换到官方仓库？")
 	var ui_code=storage.get("ui_code")
 	var data=storage.get("hubData")
 	if(!data||!data.HubRoot||data.HubRoot!=getHubPath())ui_code=""

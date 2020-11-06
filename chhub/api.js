@@ -30,9 +30,9 @@ api.getApi=function(data){
 		obj.raw.storages=global.storages
 		global.storages={
 			create(str){
-				return obj.raw.storages.create("appdata_"+uniqueId)
+				return obj.raw.storages.create("appdata_"+uniqueId+"_"+str)
 			},remove(str){
-				return obj.raw.storages.remove("appdata_"+uniqueId)
+				return obj.raw.storages.remove("appdata_"+uniqueId+"_"+str)
 			}
 		}
 		obj.raw.engines=global.engines

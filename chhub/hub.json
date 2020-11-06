@@ -3,12 +3,12 @@
     "msg": "",
     "data": {
         "HubRoot":"https://chrrg.github.io/chhub/hub.json",
-        "ui":["files/ui.js",10],
+        "ui":["files/ui.js",11],
         "list": [{
             "id":1,
             "name": "2020双十一喵喵",
             "file": "files/1.js",
-            "version": "1.8.11",
+            "version": "1.8.12",
             "desc": "一键完成淘宝喵币任务（淘宝9.5.7防检测）"
         },{
             "id":2,
