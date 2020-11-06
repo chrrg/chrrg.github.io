@@ -392,12 +392,18 @@ ui.viewpager.setTitles(["我的脚本", "在线仓库"]);
 ui.tabs.setupWithViewPager(ui.viewpager);
 ui.emitter.on("create_options_menu", menu=>{
     menu.add("获取仓库地址");
+    menu.add("悬浮窗权限");
     menu.add("关于");
 });
 ui.emitter.on("options_item_selected", (e, item)=>{
     switch(item.getTitle()){
         case "获取仓库地址":
             alert("当前使用的仓库地址：",api.getExtras().hubData.HubRoot)
+            break;
+        case "悬浮窗权限":
+            var intent = new Intent();
+            intent.setAction("android.settings.action.MANAGE_OVERLAY_PERMISSION");
+            app.startActivity(intent);
             break;
         case "关于":
             alert("关于", "一点仓库\n"+
