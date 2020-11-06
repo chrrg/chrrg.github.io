@@ -157,8 +157,13 @@ var reSetData=function(){
         if(!data.useLast||new Date(data.useLast).toString().slice(0, 10)!==new Date().toString().slice(0, 10)){
             item.mytip="今日未使用";
         }
+        
+
         if(data.currentVersion){
-            item.buttonText="删除"
+            if(item.version!=data.currentVersion)
+                item.buttonText="更新"
+            else
+                item.buttonText="删除"
             uiData.push(item)
         }else{
             item.buttonText="下载"
@@ -167,7 +172,7 @@ var reSetData=function(){
         item.localVersion=data.currentVersion
         if(!item.localVersion)item.localVersion="无"
         if(data.useCount>=5){
-            item.tip="(最常用)"
+            item.tip="(常用)"
         }
         if(item.version!=data.currentVersion){
             if(!data.currentVersion){
