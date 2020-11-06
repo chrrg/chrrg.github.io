@@ -160,9 +160,10 @@ var reSetData=function(){
         
 
         if(data.currentVersion){
-            if(item.version!=data.currentVersion)
+            if(item.version!=data.currentVersion){
                 item.buttonText="更新"
-            else
+                item.mytip+="|有更新"
+            }else
                 item.buttonText="删除"
             uiData.push(item)
         }else{
