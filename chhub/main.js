@@ -1,10 +1,10 @@
 //这个文件平时可以做测试使用
 
 
-runTestUI();
+// runTestUI();
 // console.log("开始测试");//在这里也可以测试一些代码
 // allDom();//显示所有控件
-// runTest(6);//输入6代表测试6.js
+// runTest(7);//输入6代表测试6.js
 
 exit();//测试时请加上这行，下面是软件的源码，勿改
 var eula = storages.create("github.com-chrrg-oneClickHub-eula");
